@@ -18,17 +18,21 @@ function SignupForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // ✅ Frontend password length validation
+    if (password.length < 6 || password.length > 12) {
+      setError("Password should be between 6 and 12 characters long.");
+      return;
+    }
 
     try {
-      setError("");
-
       const isValidEmail = await authService.checkEmail(email);
-      dispatch(login({ name, email, contact: Contact, password }));
 
       if (isValidEmail) {
+        dispatch(login({ name, email, contact: Contact, password }));
         navigate("/aadhaaverifying");
-      }
-      else{
+      } else {
         setError("Email already in use. Please use a different email.");
       }
     } catch (error) {
@@ -68,18 +72,16 @@ function SignupForm() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 border rounded-md focus:ring-2 focus:ring-yellow-400 outline-none"
             />
-            {error && (
-              <p className="text-red-500 text-sm mt-1">{error}</p>
-            )}
+
             <input
               type="text"
-              inputMode="numeric" // shows numeric keypad on mobile
+              inputMode="numeric"
               placeholder="Contact Number"
               value={Contact}
               required
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ""); // remove non-digits
-                if (value.length <= 10) setContact(value); // limit to 10 digits
+                const value = e.target.value.replace(/\D/g, "");
+                if (value.length <= 10) setContact(value);
               }}
               maxLength="10"
               className="w-full p-3 border rounded-md focus:ring-2 focus:ring-yellow-400 outline-none"
@@ -87,12 +89,16 @@ function SignupForm() {
 
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Password (6–12 characters)"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
               required
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 border rounded-md focus:ring-2 focus:ring-yellow-400 outline-none"
             />
+
+            {/* ✅ Show error message */}
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
             <button
               type="submit"
               className="w-full bg-yellow-500 text-white py-3 rounded-md hover:bg-yellow-600 transition"

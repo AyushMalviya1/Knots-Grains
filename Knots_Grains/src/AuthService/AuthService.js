@@ -9,11 +9,11 @@ class AuthService {
 
       const data = await response.json();
       if (!response.ok) {
-        // Backend exception
-        throw new Error(data.success || "Signup failed");
+        
+        throw new Error(data.message || "Signup failed");
       } 
       console.log("Success:", data);
-      return data; // return data for the caller
+      return data; 
     } catch (error) {
       console.error("Error:", error);
       throw error; // throw so caller can catch
@@ -35,9 +35,7 @@ class AuthService {
       throw new Error(data.error || "Login failed");
     }
 
-    // Success case
-    return data; // { message: "successful", carpenter: {...} }
-
+    return data; 
   } catch (error) {
     console.error("Login Error:", error.message);
     throw error;
@@ -92,6 +90,28 @@ verifyAadhaar = async (aadhaar) => {
     throw error;
   }
 }
+
+
+updateProfile = async (formData) => {
+  try {
+    const response = await fetch("http://localhost:2003/updateCarpenter", {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok " + response.status);
+    }
+
+    const data = await response.json();
+    console.log("Profile updated successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Update profile error:", error);
+    throw error;
+  }
+};
+
 
   
 }

@@ -9,32 +9,40 @@ function LoginForm() {
   const { closeModal, openSignup } = useModalNavigation();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const carpenter = { email, password };
+    const carpenter = { email, password };
 
-  try {
-    const data = await authService.login(carpenter);
+    try {
+      const data = await authService.login(carpenter);
 
-    if (data.message === "successful") {
-      dispatch(login(data.carpenter)); // use returned object
-      navigate("/profile");
-    } else {
-      alert(data.error || "Invalid credentials!");
+      if (data.message === "successful") {
+        const imageBase64 = data.image; 
+
+        const image = imageBase64
+          ? `data:image/jpeg;base64,${imageBase64}`
+          : "https://ntouchmassageandwellness.com/wp-content/uploads/2016/02/no-profile-image.jpg";
+
+          data.carpenter.image = image;
+        dispatch(login(data.carpenter));
+        navigate("/profile");
+      } else {
+        alert(data.error || "Invalid credentials!");
+      }
+    } catch (error) {
+      setError("Invalid credentials");
     }
-  } catch (error) {
-    alert(error.message || "Login failed! Please try again.");
-  }
-};
-
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50 z-50">
       <div className="bg-white p-8 rounded-lg w-full max-w-md shadow-xl relative">
+
         <button
           onClick={closeModal}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
@@ -62,6 +70,8 @@ function LoginForm() {
               className="w-full p-3 border rounded-md focus:ring-2 focus:ring-yellow-400 outline-none"
               required
             />
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            
             <button
               type="submit"
               className="w-full bg-yellow-500 text-white py-3 rounded-md hover:bg-yellow-600 transition"

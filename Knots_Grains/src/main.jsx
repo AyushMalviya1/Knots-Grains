@@ -15,7 +15,7 @@ import LoginForm from "./components/ModalForm/LoginForm.jsx";
 import SignupForm from "./components/ModalForm/SignupForm.jsx";
 import Profile from "./components/Profile.jsx"; 
 import AadharVerification from "./components/ModalForm/AadharVerification";
-
+import UpdateProfile from "./components/UpdateProfile/UpdateProfile";
 // ✅ Create your router
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="signup" element={<SignupForm />} />
       <Route path="profile" element={<Profile />} />
       <Route path="/aadhaaverifying" element={<AadharVerification/>} />
+      <Route path="/update-profile" element={<UpdateProfile/>} />
     </Route>
   )
 );

@@ -23,14 +23,13 @@ const AadharVerification = () => {
     setError("");
     setLoading(true);
 
-    // ✅ Check consent first
+    
     if (!consent) {
       setLoading(false);
       setError("You must provide consent before verification.");
       return;
     }
 
-    // Validate Aadhaar locally
     if (aadhaar.length !== 12 || isNaN(aadhaar)) {
       setLoading(false);
       setError("Invalid Aadhaar number! Must be exactly 12 digits.");

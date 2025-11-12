@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
 import { Mail, Phone, MapPin, Star } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
@@ -11,7 +11,7 @@ export default function CarpenterProfile() {
 
   useEffect(() => {
     if (!authStatus) {
-      window.location.href = "/signup";
+      navigate("/login");
     }
   }, [authStatus]);
 
@@ -24,6 +24,7 @@ export default function CarpenterProfile() {
     rating: 4.8,
     specialties: ["Furniture Design", "Home Interior", "Wood Polishing"],
     bio: useSelector((state) => state.auth.bio),
+    image : useSelector((state) => state.auth.image),
     portfolio: [
       { id: 1, img: "https://source.unsplash.com/600x400/?wood,chair" },
       { id: 2, img: "https://source.unsplash.com/600x400/?carpentry,table" },
@@ -31,6 +32,7 @@ export default function CarpenterProfile() {
     ],
   };
 
+ 
   return (
     <div className="min-h-screen bg-linear-to-b from-amber-50 to-orange-100 py-10 px-4 flex justify-center">
       <Card className="max-w-4xl w-full shadow-xl rounded-2xl overflow-hidden">
@@ -38,10 +40,15 @@ export default function CarpenterProfile() {
           {/* Header Section */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
             <img
-              src="https://source.unsplash.com/200x200/?carpenter,man"
-              alt="Carpenter"
-              className="rounded-full w-40 h-40 object-cover border-4 border-amber-400 shadow-md"
-            />
+  src={
+    carpenter.image
+      ? carpenter.image
+      : "https://ntouchmassageandwellness.com/wp-content/uploads/2016/02/no-profile-image.jpg"
+  }
+  alt="Carpenter"
+  className="rounded-full w-40 h-40 object-cover border-4 border-amber-400 shadow-md"
+/>
+
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-amber-800">{carpenter.name}</h1>
               <p className="text-gray-700 mt-2">{carpenter.bio}</p>
